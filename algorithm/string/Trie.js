@@ -1,3 +1,10 @@
+/**
+ * 
+ * 核心思想： 空间换时间
+利用字符串的公共前缀来降低查询时间的开销以达到提高效率的目的
+ * 
+ */
+
 class Trie {
   constructor() {
     this.isEnd = false;
@@ -35,3 +42,4 @@ class Trie {
     return node;
   }
 }
+
