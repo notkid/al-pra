@@ -1,12 +1,12 @@
 /*
  * @Author: your name
  * @Date: 2021-03-02 23:14:06
- * @LastEditTime: 2021-03-08 18:17:00
+ * @LastEditTime: 2021-03-08 20:14:56
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \leetcode\react-demo-app\src\Component.js
  */
-import { createDOM } from './react-dom'
+import { createDOM, compareTwoVdom } from './react-dom'
 
 export let updateQueue = {
     isBatchingUpdate: false,
@@ -95,9 +95,9 @@ export default class Component {
         let oldRenderVdom = this.oldRenderVdom
         let oldDOM = oldRenderVdom.dom
         // dom diff
-        let currentRenderVdom =  compareTwoVdom(oldDOM.parentNode, oldRenderVdom, newRenderVdom )
-        this.oldRenderVdom = currentRenderVdom
-        updateClassComponent(this, newRenderVdom)
+        compareTwoVdom(oldDOM.parentNode, oldRenderVdom, newRenderVdom )
+        this.oldRenderVdom = newRenderVdom
+        // updateClassComponent(this, newRenderVdom)
         if (this.componentDidUpdate) {
             this.componentDidUpdate()
         }

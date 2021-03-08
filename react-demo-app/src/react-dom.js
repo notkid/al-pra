@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-02-08 20:47:09
- * @LastEditTime: 2021-03-08 18:16:42
+ * @LastEditTime: 2021-03-08 20:12:23
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \leetcode\react-demo-app\src\react-dom.js
@@ -46,6 +46,7 @@ export function createDOM(vdom) {
     else {
         document.textContent = props.children ? props.children.toString() : ""
     }
+    console.log(vdom)
     vdom.dom = dom
 
     return dom
@@ -55,13 +56,15 @@ export function createDOM(vdom) {
 function mountClassComponent(vdom) {
     let { type, props } = vdom
     let classInstance = new type(props)
+    // vdom.classInstance = classInstance
     if (classInstance.componentWillMount) {
         classInstance.componentWillMount()
     }
 
-    let renderVdom = classInstance.render()
-    classInstance.oldRenderVdom = renderVdom
-    let dom = createDOM(renderVdom)
+    let oldRenderVdom = classInstance.render()
+    classInstance.oldRenderVdom = oldRenderVdom
+    vdom.oldRenderVdom = oldRenderVdom
+    let dom = createDOM(oldRenderVdom)
     if (classInstance.componentDidMount) {
         dom.componentDidMount = classInstance.componentDidMount.bind(classInstance)
     }
@@ -77,8 +80,9 @@ function mountClassComponent(vdom) {
  */
 function mountFunctionComponent(vdom) {
     let { type: FunctionComponent, props } = vdom;
-    let renderVdom = FunctionComponent(props);
-    return createDOM(renderVdom)
+    let oldRenderVdom = FunctionComponent(props);
+    vdom.oldRenderVdom = oldRenderVdom
+    return createDOM(oldRenderVdom)
 
 }
 
@@ -108,14 +112,56 @@ function updateProps(dom, newProps) {
     }
 }
 
-export function compareTwoVdom(parentDOM, oldVdom, newVdom){
+export function compareTwoVdom(parentDOM, oldVdom, newVdom, nextDOM){
     if (!oldVdom && !newVdom){
         return null
     } else if (oldVdom &&!newVdom) {
         let currentDOM = findDOM(oldVdom)
+        if (currentDOM) parentDOM.removeChild(currentDOM)
+        if (oldVdom.classInstance && oldVdom.classInstance.componentWillUnmount) {
+            oldVdom.componentWillMount()
+        }
+    } else if (!oldVdom && newVdom) {
+        let newDOM = createDOM(newVdom)
+        if (nextDOM)
+             parentDOM.insertBefore(newDOM, nextDOM)
+        else
+            parentDOM.appendChild(newDOM)
+        return newDOM
+    } else if (oldVdom && newVdom && (oldVdom.type !== newVdom.type)) {
+        let oldDOM = findDOM(oldDOM)
+        let newDOM = createDOM(newVdom)
+        parentDOM.replaceChild(newDOM, oldDOM)
+        if (oldVdom.classInstance &&oldVdom.classInstance.componentWillUnmount) {
+            oldVdom.classInstance.componentWillUnmount()
+        }
+    } else {
+        updateElement(oldVdom, newVdom)
+        // return newVdom
     }
+}
+
+function updateElement(oldVdom, newVdom) {
+    if (typeof oldVdom.type === 'string') {
+        let currentDOM = newVdom.dom = oldVdom.dom
+        updateProps(currentDOM, oldVdom.props, newVdom.props)
+    }
+}
 
 
+
+function findDOM(vdom) {
+    let {type} = vdom
+    let dom;
+    if (typeof type === 'function') {
+        if (type.isReactComponent) {
+            dom = findDOM(vdom.classInstance.oldRenderVdom)
+        } else {
+            dom = findDOM(vdom.oldRenderVdom)
+        }
+    } else {
+        dom = vdom.dom
+    }
 }
 
 const ReactDOM = { render, }
