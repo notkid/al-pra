@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-02-08 20:33:38
- * @LastEditTime: 2021-03-06 15:10:51
+ * @LastEditTime: 2021-03-08 13:07:04
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \leetcode\react-demo-app\src\index.js
@@ -35,7 +35,29 @@ class Counter extends React.Component {
   constructor(props) {
     super(props);
     this.state = { number : 0}
+    console.log('Counter 1.constructor')
   }
+
+  componentWillMount() {
+    console.log('Counter 2.componentWillMount')
+  }
+  componentDidMount() {
+    console.log('Counter 4.componentDidMount')
+  }
+
+  componentWillUpdate() {
+    console.log('Counter 6.componentWillUpdate')
+  }
+
+  compoentDidUpdate() {
+    console.log('Counter 7.compoentDidUpdate')
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log('Counter 5.shouldComponentUpdate')
+    return true
+  }
+
   handleClick = (event) => {
     updateQueue.isBatchingUpdate = true
     this.setState({number: this.state.number+1})
@@ -51,6 +73,7 @@ class Counter extends React.Component {
     updateQueue.batchUpdate()
   }
   render() {
+    console.log('Counter 3.render')
     return <div >
       <p>{this.state.number}</p>
     <button onClick={this.handleClick}> <span> + </span> </button>

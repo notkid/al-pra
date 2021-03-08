@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-02 23:14:06
- * @LastEditTime: 2021-03-06 15:10:04
+ * @LastEditTime: 2021-03-08 18:17:00
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \leetcode\react-demo-app\src\Component.js
@@ -13,7 +13,7 @@ export let updateQueue = {
     updaters: new Set(),
     batchUpdate() {
         for (let updater of this.updaters) {
-            updater.updateClassComponent()
+            updater.updateComponent()
         }
         this.isBatchingUpdate = false
     }
@@ -30,18 +30,22 @@ class Updater {
         if (typeof callback === 'fucntion') {
             this.callbacks.push(callback)
         }
+        this.emitUpdate()
+        
+    }
+
+    emitUpdate(newProps) {
         if (updateQueue.isBatchingUpdate) {
             updateQueue.updaters.add(this)
         } else {
-            this.updateClassComponent()
+            this.updateComponent()
         }
     }
-    updateClassComponent() {
+
+    updateComponent() {
         let { classInstance, pendingStates, callbacks } = this
         if (pendingStates.length > 0) {
-            classInstance.state = this.getState()
-            classInstance.forceUpdate()
-            callbacks.forEach(cb => cb())
+            shouldUpdate(classInstance, pendingStates)
         }
     }
     getState() {
@@ -59,6 +63,15 @@ class Updater {
 }
 
 
+function shouldUpdate(classInstance, nextState) {
+    classInstance.state = nextState
+    if (classInstance.shouldComponentUpdate
+        &&!classInstance.shouldComponentUpdate(classInstance.props, classInstance.state)) {
+            return;
+        }
+    classInstance.forceUpdate()
+}
+
 export default class Component {
     static isReactComponent = true
     constructor(props) {
@@ -75,8 +88,19 @@ export default class Component {
     }
 
     forceUpdate() {
-        let newVdom = this.render()
-        updateClassComponent(this, newVdom)
+        if (this.componentWillUpdate) {
+            this.componentWillUpdate()
+        }
+        let newRenderVdom = this.render()
+        let oldRenderVdom = this.oldRenderVdom
+        let oldDOM = oldRenderVdom.dom
+        // dom diff
+        let currentRenderVdom =  compareTwoVdom(oldDOM.parentNode, oldRenderVdom, newRenderVdom )
+        this.oldRenderVdom = currentRenderVdom
+        updateClassComponent(this, newRenderVdom)
+        if (this.componentDidUpdate) {
+            this.componentDidUpdate()
+        }
     }
     render() {
         throw new Error('此方法为抽象方法')

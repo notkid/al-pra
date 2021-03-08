@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-02-08 20:47:09
- * @LastEditTime: 2021-03-06 14:35:03
+ * @LastEditTime: 2021-03-08 18:16:42
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \leetcode\react-demo-app\src\react-dom.js
@@ -12,6 +12,7 @@ import { addEvent } from './event'
 function render(vdom, container) {
     const dom = createDOM(vdom)
     container.appendChild(dom)
+    dom.componentDidMount && dom.componentDidMount()
 }
 
 export function createDOM(vdom) {
@@ -45,18 +46,25 @@ export function createDOM(vdom) {
     else {
         document.textContent = props.children ? props.children.toString() : ""
     }
-    // vdom.dom = dom
+    vdom.dom = dom
 
     return dom
 }
 
 
 function mountClassComponent(vdom) {
-    let { type, props }= vdom
+    let { type, props } = vdom
     let classInstance = new type(props)
+    if (classInstance.componentWillMount) {
+        classInstance.componentWillMount()
+    }
 
     let renderVdom = classInstance.render()
+    classInstance.oldRenderVdom = renderVdom
     let dom = createDOM(renderVdom)
+    if (classInstance.componentDidMount) {
+        dom.componentDidMount = classInstance.componentDidMount.bind(classInstance)
+    }
     classInstance.dom = dom
     return dom
 }
@@ -92,12 +100,22 @@ function updateProps(dom, newProps) {
         } else if (key.startsWith('on')) {
             // dom[key.toLocaleLowerCase()] = newProps[key]
             addEvent(dom, key.toLocaleLowerCase(), newProps[key])
-        } 
-        
-        else  {
+        }
+
+        else {
             dom[key] = newProps[key]
         }
     }
+}
+
+export function compareTwoVdom(parentDOM, oldVdom, newVdom){
+    if (!oldVdom && !newVdom){
+        return null
+    } else if (oldVdom &&!newVdom) {
+        let currentDOM = findDOM(oldVdom)
+    }
+
+
 }
 
 const ReactDOM = { render, }
