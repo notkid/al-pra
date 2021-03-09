@@ -7,6 +7,7 @@
  * @FilePath: \leetcode\react-demo-app\src\react.js
  */
 import Component from './Component'
+import { wrapToVdom } from './utils'
  /**
   * @description: 
   * @param {*} type
@@ -15,11 +16,17 @@ import Component from './Component'
   * @return {*}
   */
  function createElement(type, config, children) {
+     if (config) {
+         delete config.__source;
+         delete config.__self;
+     }
      let props = {...config}
      if (arguments.length > 3) {
-         children = Array.prototype.slice.call(arguments, 2)
+        props.children = Array.prototype.slice.call(arguments, 2).map(wrapToVdom)
+     } else {
+
+         props.children = wrapToVdom(children)
      }
-     props.children = children
      return {
          type,
          props,
