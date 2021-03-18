@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-02-08 20:33:38
- * @LastEditTime: 2021-03-08 13:07:04
+ * @LastEditTime: 2021-03-09 12:44:13
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \leetcode\react-demo-app\src\index.js
@@ -36,6 +36,16 @@ class Counter extends React.Component {
     super(props);
     this.state = { number : 0}
     console.log('Counter 1.constructor')
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const { count } = nextProps
+    if (count % 2 === 0) {
+      return { number:count * 2}
+    } else if (count % 3 === 0 ) {
+      return { number:count *3}
+    }
+    return null;
   }
 
   componentWillMount() {
