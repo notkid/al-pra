@@ -6,8 +6,8 @@
  * @Description: In User Settings Edit
  * @FilePath: \leetcode\react-demo-app\src\index.js
  */
-import React from './react';
-import ReactDOM from './react-dom';
+import React from 'react';
+import ReactDOM from 'react-dom';
 import { updateQueue} from './Component'
 
 // let element1 = (
