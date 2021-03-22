@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-16 12:51:06
- * @LastEditTime: 2021-03-16 19:49:06
+ * @LastEditTime: 2021-03-20 09:53:01
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \leetcode\algorithm\dp\index.js
@@ -61,10 +61,7 @@ var maxProfit = function (prices) {
 };
 
 
-/**
- * 198. 打家劫舍
- * 
- */
+
 
 /**
  * @param {number[]} nums
@@ -181,25 +178,14 @@ var robRange = function (nums, start, end) {
  * @return {number}
  */
  var change = function(amount, coins) {
-    let n = coins.length
-    let dp = new Array(n+1).fill().map(() => new Array(amount + 1).fill(0))
-    for (let i = 0; i<= n; i++) {
-        dp[i][0] = 1
-    }
-    for (let j = 1 ; j<=amount;j++) {
-        dp[0][j] = dp[0][j-1] + 1
-    }
-    for (let i = 1; i<= n;i++) {
-        for (let j = 1; j < amount; j++) {
-            if (j - coins[i-1] > 0) {
-                dp[i][j] = dp[i-1][j] + dp[i][j - coins[i-1]]
-
-            } else {    
-                dp[i][j] = dp[i-1][j]
-            }
+    let dp = new Array(amount + 1).fill(0)
+    dp[0] = 1
+    for (let c of coins) {
+        for (let j = c; j< amount+1; j++) {
+            dp[j] += dp[j-c]
         }
     }
-    return dp[n][amount]
+    return dp[amount]
 };
 
-change(5, [1,2,5])
+// change(5, [1,2,5])
