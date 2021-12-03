@@ -11,23 +11,30 @@
  * @return {number}
  */
  var findTheLongestSubstring = function(s) {
-    const dict = new Map([
-        ['a', 0],
-        ['e', 0],
-        ['i', 0],
-        ['o', 0],
-        ['u', 0],
-    ])
-    for(let i of s) {
-        if (dict.get(i) !== undefined) {
-            dict.set(i, dict.get(i)++%2)
+    const pos = new Array(1<<5).fill(-1)
+    let status = 0,ans = 0
+    pos[0] = 0
+    for(let i =0;i < s.length;i++) {
+        let str = s[i]
+        if (str === 'a' ){
+            status ^= 1 << 0
+        }else if(str === 'e' ) {
+            status ^= 1 << 1
+        }else if(str === 'i' ) {
+            status ^= 1 << 2
+        }else if(str === 'o' ) {
+            status ^= 1 << 3
+        }else if(str === 'u' ) {
+            status ^= 1 << 4
+        }
+        if (~pos[status]) {
+            ans = Math.max(ans, i+1-pos[status])
+        } else {
+            pos[status] = i+1
         }
     }
-    while(dict.values().some(d => d===1)) {
-        for (let [k,v] of dict) {
-            if (v === 1) {
-                
-            }
-        }
-    }
+    return ans
 };
+
+const c = findTheLongestSubstring('eleetminicoworoep')
+// console.log(c,'ffff')
