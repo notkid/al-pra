@@ -12,8 +12,6 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/algorithm/string/1417.js",
-            "runtimeExecutable": "/Users/mac/.nvm/versions/node/v16.14.2/bin/node"
         }
     ]
 }
