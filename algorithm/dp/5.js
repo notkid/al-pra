@@ -2,17 +2,17 @@
  * @param {string} s
  * @return {string}
  */
- var longestPalindrome = function(s) {
-     let beginIndex = 0, maxLen = 1
-     const n = s.length
+var longestPalindrome = function (s) {
+    let beginIndex = 0, maxLen = 1
+    const n = s.length
     const dp = new Array(n).fill(false).map(_ => new Array(n).fill(false))
-    for(let i = 0;i < n;i ++) {
+    for (let i = 0; i < n; i++) {
         dp[i][i] = true
     }
-    for(let L = 2; L <=n; L ++) {
-        for(let i =0; i<n;i++) {
+    for (let L = 2; L <= n; L++) {
+        for (let i = 0; i < n; i++) {
             const j = L + i - 1
-            if (j>=n) {
+            if (j >= n) {
                 break
             }
             if (s[i] !== s[j]) {
@@ -21,17 +21,18 @@
                 if (j - i < 3) {
                     dp[i][j] = true
                 } else {
-                    dp[i][j] = dp[i+1][j-1]
+                    dp[i][j] = dp[i + 1][j - 1]
                 }
             }
-            if (dp[i][j] && j -i + 1> maxLen) {
-                maxLen = j -i + 1
+            if (dp[i][j] && j - i + 1 > maxLen) {
+                maxLen = j - i + 1
                 beginIndex = i
             }
         }
     }
-    // console.table(dp)
-    return s.substring(beginIndex, beginIndex +  maxLen)
+    console.table(dp)
+    console.log(dp.map(d => d.reduce((a, b) => { if (b) { return a + b } else { return a } }, 0)).reduce((a, b) => a + b, 0))
+    return s.substring(beginIndex, beginIndex + maxLen)
 };
 
 /**
