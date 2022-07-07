@@ -28,3 +28,16 @@
     traverse(root)
     return ret
 };
+
+// var inorderTraversal = function(root) {
+//     const ret = []
+//     const traverse = (node) => {
+//         if (node === null) return
+
+//         traverse(node.left)
+//         ret.push(node.val)
+//         traverse(node.right)
+//     }
+//     traverse(root)
+//     return ret
+// }
