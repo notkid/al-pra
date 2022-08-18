@@ -3,7 +3,7 @@
  * 96. 不同的二叉搜索树
  */
 
-/**
+/**x
  * @param {number} n
  * @return {number}
  */
