@@ -16,5 +16,22 @@
  * @return {TreeNode[]}
  */
  var findDuplicateSubtrees = function(root) {
-
+    var hashMap = new Set()
+    var res = []
+    var traverse = (node) => {
+        if (!node) return '#'
+        let left = traverse(node.left)
+        let right = traverse(node.right)
+        let subTree = left + ',' + right + ',' + node.val
+        if (hashMap.has(subTree)) {
+            const pair = hashMap.get(subTree)
+            res.push(pair[0])
+        } else if (!hashMap[subTree]) {
+            hashMap[subTree] = 0
+        }
+        hashMap[subTree]++
+        return subTree
+    }
+    traverse(root)
+    return res
 };
