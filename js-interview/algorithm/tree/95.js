@@ -17,7 +17,28 @@
  * @return {TreeNode[]}
  */
  var generateTrees = function(n) {
-    for (let i = 0; i< n;i ++) {
-        
+    var build = (lo, hi) => {
+        let res = []
+        if (lo > hi){
+            res.push(null)
+            return res
+        }
+
+        for (let i = lo; i<=hi; i++) {
+            let leftTree = build(lo, i- 1)
+            let rightTree = build(i + 1, hi)
+            for(let left of leftTree) {
+                for (let right of rightTree ) {
+                    let root = new TreeNode(i)
+                    root.left = left
+                    root.right = right
+                    res.push(root)
+                }
+            }
+        }
+        return res
+
     }
+
+    return build(1, n)
 };
