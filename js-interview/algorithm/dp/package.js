@@ -87,3 +87,33 @@ function dp(level, parentChoice) {
 //     .map(a => a.replace('D', ''))
 //     .filter(a => a.length >= 3)
 // console.log(a.length / arr.length)
+
+// 0 1背包
+function knapsack(W, N,wt,val) {
+    let dp = 0
+    for(let i = 1;i <=N;i++) {
+        for(let w = 1; w<=W;w++ ) {
+            if (w -wt[i-1] < 0) {
+                dp[i][w] = dp[i-1][w]
+            } else {
+                dp[i][w] = Math.max(dp[i-1][w-wt[i-1]] + val[i-1], dp[i-1][w])
+            }
+        }
+    }
+    return dp[N][W]
+}
+
+function canPartition2(nums) {
+    const sum = nums.reduce((a, b) => a + b, 0)
+    if (sum % 2) return false
+    const dp = new Array(sum /2 + 1).fill(false)
+    dp[0] = true
+    for(let i = 0;i<nums.length;i++) {
+        for(let j = sum /2; j>=0; j--) {
+            if (j - nums[i] >= 0) {
+                dp[j] = dp[j] || dp[j-nums[i]]
+            }
+        }
+    }
+    return dp[sum/2]
+}
