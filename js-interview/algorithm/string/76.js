@@ -1,4 +1,9 @@
 /**
+ * 76. 最小覆盖子串
+ * 
+ */
+
+/**
  * @param {string} s
  * @param {string} t
  * @return {string}
@@ -52,4 +57,39 @@
       }
     }
     return len == Number.MAX_VALUE ? "" : s.substr(start, len);
+  };
+
+  var minWindow2 = function(s, t) {
+    let left = 0, right = 0,valid = 0,len = Number.MAX_VALUE,start = 0
+    let window = {}, need = {}
+    for(let i = 0; i< t.length; i ++) {
+      need[t[i]] = (need[t[i]] || 0) + 1
+    }
+    while(right < s.length) {
+      const c = s[right]
+      right ++
+      if (need[c]) {
+        window[c] = (window[c] || 0)  + 1
+        if (window[c] === need[c]) {
+          valid++
+        }
+      }
+
+      while(valid === Reflect.keys(need).length) {
+        if (right - left < len) {
+          start = left
+          len = right - left
+        } 
+        let d = s[left]
+        left++
+        if (need[d]) {
+          if (window[d] === need[d]) {
+            valid--
+          }
+          window[d]--
+        }
+      }
+
+    }
+    return len === Math.MAX_VALUE ? "": s.substr(start, len)
   };
