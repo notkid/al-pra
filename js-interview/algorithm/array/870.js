@@ -1,4 +1,6 @@
 /**
+ * 
+ * 870
  * @param {number[]} nums1
  * @param {number[]} nums2
  * @return {number[]}
@@ -33,3 +35,33 @@
     }
     return ans;
   };
+/**
+ * @param {number[]} nums1
+ * @param {number[]} nums2
+ * @return {number[]}
+ */
+ var advantageCount2 = function(nums1, nums2) {
+  let len = nums1.length
+  let ans = new Array(len)
+  nums1.sort((a, b) => a - b)
+  let indexB  = nums2.map((a, i) => i)
+  indexB.sort((a, b) => {
+    if (nums2[a] > nums2[b]  ) return 1
+    return -1
+  })
+
+  let i = 0
+  let j = 0
+  let k = len - 1
+  while(i<len) {
+    if (nums1[i] > nums2[indexB[j]]) {
+      ans[indexB[j]] = nums1[i]
+      j++
+    } else {
+      ans[indexB[k]] = nums1[i]
+      k--
+    }
+    i++
+  }
+  return ans
+ }
