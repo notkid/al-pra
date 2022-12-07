@@ -7,11 +7,17 @@
  * @param {number} target
  * @return {boolean}
  */
- var findNumberIn2DArray = function(matrix, target) {
-    let iLeft = 0,jLeft = 0,iRight = matrix.length -1,jRight = matrix[0].length -1
-    while() {
-        let midLeft = Math.floor((iLeft+iRight) /2)
-        let midRight = Math.floor((jLeft+jRight) /2)
-        
+var findNumberIn2DArray = function (matrix, target) {
+  let i = matrix.length - 1,
+    j = 0;
+  while (i >= 0 && j < matrix[0].length) {
+    if (matrix[i][j] > target) {
+      i--;
+    } else if (matrix[i][j] < target) {
+      j++;
+    } else {
+      return true;
     }
+  }
+  return false;
 };

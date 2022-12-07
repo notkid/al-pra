@@ -1,3 +1,7 @@
+/**
+ * 
+ *剑指 Offer 55 - I. 二叉树的深度
+ */
 
 var maxDepth = function (root) {
 
@@ -9,7 +13,7 @@ var maxDepth = function (root) {
 };
 
 
-/**
+/**剑指 Offer 55 - II. 平衡二叉树
  * @param {TreeNode} root
  * @return {boolean}
  */

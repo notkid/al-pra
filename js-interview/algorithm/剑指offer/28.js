@@ -1,4 +1,5 @@
-/**
+/*
+剑指 Offer 28. 对称的二叉树
  * Definition for a binary tree node.
  * function TreeNode(val) {
  *     this.val = val;
